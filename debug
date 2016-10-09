@@ -1,0 +1,21 @@
+#0  			  ParentConfigParams::findParent (this=0x108de80, rdata=rdata@entry=0x7ffff0cca348, result=result@entry=0x7ffff0cca310) at ParentSelection.cc:268
+#1  0x000000000056682a in find_server_and_update_current_info (s=s@entry=0x7ffff0cc9a78) at HttpTransact.cc:315
+#2  0x000000000057498b in HttpTransact::HandleCacheOpenReadMiss (s=0x7ffff0cc9a78) at HttpTransact.cc:3125
+
+#3  0x0000000000542386 in HttpSM::call_transact_and_set_next_state (this=0x7ffff0cc9a10, f=<optimized out>) at HttpSM.cc:6776
+#4  0x000000000054ddd8 in HttpSM::state_api_callout (this=0x7ffff0cc9a10, event=<optimized out>, data=<optimized out>) at HttpSM.cc:1484
+#5  0x0000000000552b03 in HttpSM::set_next_state (this=0x7ffff0cc9a10) at HttpSM.cc:6818
+#6  0x0000000000542858 in HttpSM::state_hostdb_lookup (this=0x7ffff0cc9a10, event=500, data=0x7ffff3358000) at HttpSM.cc:2119
+#7  0x00000000005522a8 in HttpSM::main_handler (this=0x7ffff0cc9a10, event=500, data=0x7ffff3358000) at HttpSM.cc:2532
+#8  0x000000000061c27e in Continuation::handleEvent (data=0x7ffff3358000, event=500, this=0x7ffff0cc9a10) at ../../iocore/eventsystem/I_Continuation.h:146
+#9  		          reply_to_cont (cont=0x7ffff0cc9a10, ar=0x7ffff3358000, is_srv=<optimized out>) at HostDB.cc:579
+#10 0x0000000000621f2a in HostDBContinuation::dnsEvent (this=<optimized out>, event=<optimized out>, e=<optimized out>) at HostDB.cc:1621
+#11 0x00000000006393c5 in Continuation::handleEvent (data=<optimized out>, event=600, this=<optimized out>) at ../../iocore/eventsystem/I_Continuation.h:146
+#12 			  DNSEntry::postEvent (this=0x7ffff0b7a320) at DNS.cc:1277
+#13 0x0000000000720f16 in Continuation::handleEvent (data=0x7fffec16efc0, event=1, this=<optimized out>) at I_Continuation.h:146
+#14 			  EThread::process_event (this=0x7ffff4f14010, e=0x7fffec16efc0, calling_code=1) at UnixEThread.cc:145
+#15 0x0000000000721f27 in EThread::execute (this=0x7ffff4f14010) at UnixEThread.cc:196
+#16 0x0000000000720865 in spawn_thread_internal (a=0x108ce80) at Thread.cc:88
+#17 0x00007ffff688e6aa in start_thread (arg=0x7ffff4e12700) at pthread_create.c:333
+#18 0x00007ffff5b1ee9d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
+

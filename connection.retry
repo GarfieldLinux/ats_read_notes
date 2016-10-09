@@ -1,0 +1,61 @@
+
+HttpTransact::StateMachineAction_t how_to_open_connection(HttpTransact::State* s)
+
+  +------------------------------------------------+
+  | HttpSM::set_next_state() {                     |
+  |     case HttpTransact::ORIGIN_SERVER_OPEN:     |             +-----------------------------------+
+  |     case HttpTransact::ORIGIN_SERVER_RAW_OPEN: |------------>|  do_http_server_open(bool raw)    | arguments : HttpSM
+  | }                                              |             |  handler = state_http_server_open |
+  +------------------------------------------------+             +-----------------------------------+
+                                                                                  |
+                                                            |----------------------
+                                                            v
+                                              +-------------------------+
+                                     '--------| NetProcessor::connect_s |        +---------------------------------------------------------------------------+
+                                     |        +-------------------------+        |netProcessor.connect_s(this,  // state machine                             |
+                                     |                                           |                       &t_state.current.server->addr.sa,    // addr + port |
+                                     v                                           |                       connect_timeout, &opt);                             |
+                +----------------------------------------+                       +---------------------------------------------------------------------------+
+                | CheckConnect::connect_s                |
+                | handler = CheckConnect::handle_connect |
+                +----------------------------------------+
+                              |
+                              v
+                +------------------------------+
+                |   NetProcessor::connect_re   |
+                +------------------------------+
+                              |
+                              v
+                +---------------------------------------+
+                | UnixNetProcessor::connect_re_internal |
+                +---------------------------------------+
+                              |
+                              v
+                +-------------------------------+
+                | UnixNetVConnection::connectUp |
+                +-------------------------------+
+                              |
+                              v
+                +----------------------+              +---------------------+
+                | Connection::connect  | ------------>|NET_EVENT_OPEN_FAILED|
+                +----------------------+              +---------------------+
+                              |                                 |
+                              v                                 |
+                +---------------+                               |
+                |   ::connect   |                               |
+                +---------------+                               |
+                                                                v
+                                                +--------------------------------+
+                                        '-------| HttpSM::state_http_server_open |   current.state = HttpTransact::CONNECTION_ERROR
+                                        |       +--------------------------------+   current.server.connect_result = NET_EVENT_OPEN_FAILED
+                                        v        
+             +------------------------------------------------------------------------+
+             | HttpSM::call_transact_and_set_next_state(HttpTransact::HandleResponse) |
+             +------------------------------------------------------------------------+
+
+find_server_and_update_current_info
+        return HttpTransact::HOST_NONE
+
+handle_parent_died
+        PROXY_SEND_ERROR_CACHE_NOOP
+

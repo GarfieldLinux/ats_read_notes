@@ -1,0 +1,26 @@
+
+
+
+
+         +--------------------+        +-----------------+
+         |content_length == 0 |        | http status 204 |
+         +--------------------+        +-----------------+
+                     |                         |
+                     |    with           with  |
+                     |___________.    .________|
+                                 v    v
+                           +---------------+
+                           | non-null body |
+                           +---------------+
+  
+
+CASE I:
+1. http status 404 with non-empty body
+2. cache stale
+        http status 200 with content-length 0 and empty body.
+
+CASE II:
+1. http status xxx with non-empty body
+2. cache stale
+        http status 200 with content-length 0 and empty body.
+

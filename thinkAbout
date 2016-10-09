@@ -1,0 +1,28 @@
+
+|-------------------|
+|c : composition    |
+|                   |
+|i : inheritance    |
+`-------------------'
+
+
+ UnixNetProcessor::start
+     init_thread_for_net
+     init_thread_for_http_sessions
+ 
+
+
+ EThread:
+      SessionBucket --> l1_hash
+                                                   +---------------+ 
+HttpSessionManager                                 | Continuation  | 
+                                                   +---------------+ 
+                                                           ^
+                  +--------------------+                   i
+                  |      EThread       |----,              |
+                  +--------------------+    |      +---------------+ 
+                                            |----c>| SessionBucket | 
+                  +--------------------+    |      +---------------+ 
+                  | HttpSessionManager |----'                                
+                  +--------------------+                                         
+                                                                                 

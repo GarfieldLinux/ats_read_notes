@@ -1,0 +1,42 @@
+
+   +----------------+
+   | records.config |
+   +----------------+
+
+   +----------------+
+   | storage.config |
+   | volume.config  |
+   +----------------+
+
+   +----------------+
+   | parents.config |
+   +----------------+
+
+
+HITTING RATIO:
+
+RESPONSE SPEED : NETWORK
+        BEST PARENT(speed)
+
+STORAGE: IO SPEED
+        DISK IO
+
+                     original server
+
+                          ^
+                          | request
+                          |
+
+                     parent proxy 
+
+                          ^
+                          |  request
+                          |
+
+                        proxy  
+
+                          ^
+                          | request
+                          |
+                        client
+

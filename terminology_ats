@@ -1,0 +1,66 @@
+acl filter:
+	Access Control List Filter
+
+proxy:
+	http:
+		remap {AclFiltering.cc -- UrlRewrite.h}
+
+HttpSM:
+	Http State Machine
+
+ICP:
+  	Internet Cache Protocol
+
+ua : 
+    User Agent(maybe)
+
+CD & LCF :
+    Content-Distribution  & Location Control Function
+
+CCF : 
+    Cluster Control Function
+
+CDPF:
+    Content Delivery Processing Function
+
+ttl:
+    Time To Live
+
+OOB:
+    Out Of Band (Message)
+
+SOCKS:
+    Socket Secure
+
+rtt:
+   Round-Trip Time
+
+mc:
+   Multicast (Group)
+
+bc:
+   Broadcast (Group)
+
+inbound \ outbound:
+   inbound    other --- connecton  or data ---> local
+   outbound   local --- connection or data ---> other
+
+
+PCRE:
+   perl-compatible regular expression
+
+cc :
+  cache control
+
+IMS: 
+  If-Modified-Since
+INM:
+  If-None-Match
+
+CGI:
+  Common Gateway Interface
+
+wks:
+  well known strings
+socks:
+   socket secure(an internet protocol)
