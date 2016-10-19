@@ -3,3 +3,8 @@ Circuit-level gateway
 socks proxy vs http proxy
 
 linux I/O scheduler
+
+tps : transaction per second
+
+uuid : universally unique identifier
+waf : web applicationn firewall
