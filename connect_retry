@@ -1,0 +1,174 @@
+
+connect retry
+
+HttpTransact::HandleCacheOpenReadHit(State* s)
+        HttpTransact::build_request(...)
+        HttpTransact::issue_revalidate(State* s)
+
+HttpTransact::handle_response_from_parent(State* s)
+
+
+HttpTransact.cc:
+    how_to_open_connection
+
+HttpSM::state_http_server_open(int event, void *data)
+
+
+
+HttpSM::set_next_state()
+    case HttpTransact::ORIGIN_SERVER_OPEN:
+    case HttpTransact::ORIGIN_SERVER_RAW_OPEN:
+        HttpSM::do_http_server_open(bool raw)
+
+        
+                
+HttpTransact::setup_plugin_request_intercept(State* s)        
+
+
+HttpTransact::HandleResponse(State* s)
+  case ICP_SUGGESTED_HOST:
+    handle_response_from_icp_suggested_host(s);
+  case PARENT_PROXY:
+    handle_response_from_parent(s);
+  case ORIGIN_SERVER:
+    handle_response_from_server(s);
+
+
+HttpTransact::handle_response_from_server(s)
+    retry_server_connection_not_open
+    how_to_open_connection
+        case HttpTransact::CACHE_PREPARE_TO_DELETE:
+        case HttpTransact::CACHE_PREPARE_TO_UPDATE:
+        case HttpTransact::CACHE_PREPARE_TO_WRITE:
+            return HttpTransact::CACHE_ISSUE_WRITE;
+
+HttpTransact::handle_response_from_parent(State* s)
+    how_to_open_connection(s);
+    --------------- or -------------------
+    // We are done so look for another parent if any
+    next_lookup = find_server_and_update_current_info(s);
+    
+    case PARENT_PROXY:
+        TRANSACT_RETURN(DNS_LOOKUP, PPDNSLookup);
+    case ORIGIN_SERVER:
+        s->current.attempts = 0;
+        s->next_action = how_to_open_connection(s);
+        if (s->current.server == &s->server_info && s->next_hop_scheme == URL_WKSIDX_HTTP) {
+          HttpTransactHeaders::remove_host_name_from_url(&s->hdr_info.server_request);
+        }
+    case HOST_NONE:
+        handle_parent_died(s);
+    default:
+        // This handles:
+        // UNDEFINED_LOOKUP, ICP_SUGGESTED_HOST,
+        // INCOMING_ROUTER
+        break;
+
+HttpTransact::handle_response_from_icp_suggested_host(State* s)
+  switch (s->current.state) {
+  case CONNECTION_ALIVE:
+    handle_forward_server_connection_open(s);
+  default:
+    // send request to parent proxy now if there is
+    // one or else directly to the origin server.
+    find_server_and_update_current_info(s);
+    s->next_action = how_to_open_connection(s);
+
+
+
+
+
+
+
+1. connection time out                     //  connect_attempts_timeout
+2. wait for responsing time out           // HTTP connection timeout
+3. connection failure.
+4. update parent.
+
+
+
+
+  // Please do not forget to fix TSServerState (ts/ts.h)
+  // in case of any modifications in ServerState_t
+  enum ServerState_t {
+    STATE_UNDEFINED = 0,
+    ACTIVE_TIMEOUT,
+    BAD_INCOMING_RESPONSE,
+    CONNECTION_ALIVE,
+    CONNECTION_CLOSED,
+    CONNECTION_ERROR,
+    INACTIVE_TIMEOUT,
+    OPEN_RAW_ERROR,
+    PARSE_ERROR,
+    TRANSACTION_COMPLETE,
+    CONGEST_CONTROL_CONGESTED_ON_F,
+    CONGEST_CONTROL_CONGESTED_ON_M
+  };
+
+
+  enum ResponseError_t {
+    NO_RESPONSE_HEADER_ERROR,
+    BOGUS_OR_NO_DATE_IN_RESPONSE,
+    CONNECTION_OPEN_FAILED,
+    MISSING_REASON_PHRASE,
+    MISSING_STATUS_CODE,
+    NON_EXISTANT_RESPONSE_HEADER,
+    NOT_A_RESPONSE_HEADER,
+    STATUS_CODE_SERVER_ERROR,
+    TOTAL_RESPONSE_ERROR_TYPES
+  };
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                             *******************       
+                        *****                   *****  
+                      **        client ---> ats      ** ---+                          
+                        *****                   *****      |
+                             *******************           |                          +--------------+
+                                                           +------------------------->| origin server|
+Main.cc                                                                               +--------------+
+      \     
+       \--->main()          ---\
+                               |
+                               |
+HttpProxyServerMain.cc:        |
+    init_HttpProxyServer  <----+
+                  |
+                  |
+HttpAccept.h:     v
+        HttpAccept::HttpAccept
+             HttpAccept::mainEvent(int event, void *data)                                    +--------------+
+                HttpClientSession::new_connection(NetVConnection * new_vc, bool backdoor)   :|NEW CONNECTOIN|
+                    HttpClientSession::do_api_callout(TSHttpHookID id)                       +--------------+
+                                   |
+                                   v
+                        HttpClientSession::state_api_callout(int event, void *)        \  +----+
+                                                                                        ->| or |
+                        HttpClientSession::handle_api_return(int event)                /  +----+
+                            HttpClientSession::new_transaction() : 
+                                
+
+HttpSM:                                                                            main_handler
+    HttpSM::init()                 ------> SET_HANDLER(&HttpSM::main_handler);  --------------->+-----------------------+
+    HttpSM::attach_client_session                                                               |jump_point = vc_handler|
+        ua_entry->vc_handler = &HttpSM::state_read_client_request_header;                       +-----------------------+
+                                             |                          -   
+                                             |                           \  
+                                             |                            -> HttpSM::state_read_server_response_header;  ------> HttpSM::attach_server_session
+        HttpSM::set_next_state()        <----+
+
+    HttpSM::call_transact_and_set_next_state(TransactEntryFunc_t f)
+        HttpSM::set_next_state()
+            case HttpTransact::SERVER_PARSE_NEXT_HDR:
+                HttpSM::state_read_server_response_header(int event, void *data)
+                    HttpSM::handle_server_setup_error
+
+````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````
+HttpSM::set_next_state
+    case HttpTransact::SERVER_PARSE_NEXT_HDR:
+    / 
+    \->  HttpSM::setup_server_read_response_header
+            HttpSM::state_read_server_response_header
+                HttpSM::handle_server_setup_error
+                    t_state.current.state = HttpSM::ServerState_t[enum]
+

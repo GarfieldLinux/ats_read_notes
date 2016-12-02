@@ -1,0 +1,50 @@
+            +------------+
+            |  Processor |
+            +------------+
+                  ^
+                  |
+          +-----------------+
+          | NetProcessor    |
+          +-----------------+
+          |     main_accept |
+          +-----------------+
+                  ^
+                  |
+          +---------------------+
+          | UnixNetProcessor    |
+          +---------------------+
+          |     accept_internal |
+          +---------------------+
+            
+            
+    
+NetAccept
+    init_accept_per_thread
+
+  +-----------------------------+
+  | ::acceptFastEvent           |
+  +-----------------------------+
+
+
+       +--------------------+
+       | UnixNetVConnection |
+       +--------------------+
+       |  mainEvent         |
+       +--------------------+
+
+
+UnixNet.cc
+    NetHandler(constructor)
+        startNetEvent
+            mainNetEvent
+
+
+HttpProxyServerMain.cc:
+    start_HttpProxyServer
+
+
+UnixNetProcessor.cc:
+    UnixNetProcessor
+    NetProcessor
+
+
