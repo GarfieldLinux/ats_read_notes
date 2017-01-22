@@ -25,16 +25,26 @@ TOOLS:
   +--------------+
 
   +------------------------------------+
+  | virtual machine vn linux           |
+  +------------------------------------+
+
+  +------------------------------------+
   |Command Line Tools                  |
   |Regular Expression Tools            |
+  |git                                 |
+  |find                                |
+  |awk                                 |
+  |sed                                 |
+  |grep                                |
+  |service manipulation                |
   +------------------------------------+
 
 PROGRAMMING:
   Language:
   +------------------------------------+
-  | C++                                |
-  | standard template library          |
+  | C++/standard template library      |
   | java                               |
+  | go                                 |
   | python                             |
   +------------------------------------+
 
@@ -55,6 +65,8 @@ PROGRAMMING:
 
   Others:
   +---------------------------------------------+
+  | english                                     |
+  |                                             |
   | Algorithm                                   |
   | Hash Algorithm(and consistency)             |
   | regular expression                          |
@@ -87,5 +99,9 @@ http   <  2. tools        |                       | wget          |
                          |web crawler                       |
                          +----------------------------------+
 
+   +----------------+
+   |Reproduce Bugs  |
+   |fix it          |
+   +----------------+
 xiangxiangzhou@aliyun.com
 Sun Jan 22 19:59:53 CST 2017
