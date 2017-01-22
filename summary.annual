@@ -1,19 +1,68 @@
 
+TOOLS:
+  +------------------------------------------------+
+  | google                                         |
+  +------------------------------------------------+
 
+  Codes:
+  +------------------------------------------------+
+  | editor                  | vim/eclipse/nodepad  |
+  | comipler/loader         | clang/g++            |
+  | debuger                 | gdb                  |
+  | performance analysis    | perf                 |
+  +------------------------------------------------+
 
-Tools:
-    http tools:
+  +------------------------+
+  | static analysis tools  |
+  | Dynamic analysis tools |
+  +------------------------+
 
+  Network:
+  +--------------+
+  | wireshark    |
+  | tcpdump      |
+  | ip           |
+  +--------------+
 
+  +------------------------------------+
+  |Command Line Tools                  |
+  |Regular Expression Tools            |
+  +------------------------------------+
 
+PROGRAMMING:
+  Language:
+  +------------------------------------+
+  | C++                                |
+  | standard template library          |
+  | java                               |
+  | python                             |
+  +------------------------------------+
 
+  Network:
+  +------------------------------------+
+  | reactor                            |
+  | proactor                           |
+  +------------------------------------+
 
+  Kernel(linux):
+  +------------------------------------+
+  | network                            |
+  | memory                             |
+  | process                            |
+  | filesytem                          |
+  | disk                               |
+  +------------------------------------+
 
-
-
-
-
-simple http server
+  Others:
+  +---------------------------------------------+
+  | Algorithm                                   |
+  | Hash Algorithm(and consistency)             |
+  | regular expression                          |
+  | network protocol                            |
+  | compiler principles                         |
+  | cdn                                         |
+  | Artifitial Intelligence, Machine Learning   |
+  +---------------------------------------------+
 
                           +--------+
         / 1. protocol     |session |
@@ -38,8 +87,5 @@ http   <  2. tools        |                       | wget          |
                          |web crawler                       |
                          +----------------------------------+
 
-        debug tools
-        performance testing tools
-
-        wireshark
-        tcpdump
+xiangxiangzhou@aliyun.com
+Sun Jan 22 19:59:53 CST 2017
